@@ -1,6 +1,7 @@
 package br.com.alura.forum.service;
 
 import br.com.alura.forum.controller.request.TopicRequest;
+import br.com.alura.forum.controller.request.TopicUpdateRequest;
 import br.com.alura.forum.model.Topic;
 import br.com.alura.forum.repository.CourseRepository;
 import br.com.alura.forum.repository.TopicRepository;
@@ -33,6 +34,12 @@ public class TopicService {
     }
 
     public Optional<Topic> findById(Long id) {
+        return topicRepository.findById(id);
+    }
+
+    public Optional<Topic> update(Long id, TopicUpdateRequest topicUpdateRequest) {
+        Topic topicToUpdate = topicUpdateRequest.convertTopicUpdateRequestToTopic(id, topicRepository);
+        topicRepository.save(topicToUpdate);
         return topicRepository.findById(id);
     }
 }

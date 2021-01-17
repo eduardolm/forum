@@ -40,6 +40,11 @@ public class Topic {
         this.course = course;
     }
 
+    public Topic(String title, String message) {
+        this.title = title;
+        this.message = message;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
