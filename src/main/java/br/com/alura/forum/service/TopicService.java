@@ -42,4 +42,8 @@ public class TopicService {
         topicRepository.save(topicToUpdate);
         return topicRepository.findById(id);
     }
+
+    public void deleteById(Long id) {
+        topicRepository.deleteById(id);
+    }
 }

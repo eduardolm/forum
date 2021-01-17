@@ -56,4 +56,10 @@ public class TopicController {
         Topic topicToUpdate = topicService.update(id, topicUpdateRequest).orElseThrow();
         return ResponseEntity.ok(new TopicDto(topicToUpdate));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable() Long id) {
+        topicService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
