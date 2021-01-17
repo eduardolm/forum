@@ -52,8 +52,8 @@ public class TopicController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Topic> update(@PathVariable() Long id, @RequestBody @Valid TopicUpdateRequest topicUpdateRequest) {
+    public ResponseEntity<TopicDto> update(@PathVariable() Long id, @RequestBody @Valid TopicUpdateRequest topicUpdateRequest) {
         Topic topicToUpdate = topicService.update(id, topicUpdateRequest).orElseThrow();
-        return ResponseEntity.ok(topicToUpdate);
+        return ResponseEntity.ok(new TopicDto(topicToUpdate));
     }
 }
