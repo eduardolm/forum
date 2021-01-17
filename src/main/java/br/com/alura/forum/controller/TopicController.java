@@ -24,7 +24,6 @@ import java.util.Optional;
 public class TopicController {
 
     private final TopicService topicService;
-    private final CourseService courseService;
 
     @GetMapping
     public List<TopicDto> list(String courseName) {

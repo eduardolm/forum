@@ -1,11 +1,10 @@
 package br.com.alura.forum.config;
 
-import br.com.alura.forum.dto.NoSuchElementErrorDto;
-import br.com.alura.forum.dto.TopicRequestDtoError;
+import br.com.alura.forum.dto.exception.NoSuchElementErrorDto;
+import br.com.alura.forum.dto.exception.TopicRequestDtoError;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
