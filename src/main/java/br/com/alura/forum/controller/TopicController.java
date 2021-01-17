@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/topics")
@@ -58,8 +59,12 @@ public class TopicController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable() Long id) {
-        topicService.deleteById(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> delete(@PathVariable() Long id) {
+        Optional<Topic> optionalTopic = topicService.findById(id);
+        if (optionalTopic.isPresent()) {
+            topicService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
