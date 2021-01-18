@@ -11,6 +11,10 @@ In order to run the API, the easier way to test it is by using an IDE and havin 
 Just clone this repository to a local machine, open the project in your favorite IDE and run it.
 To test the exposed endpoints, a program like Postman would be very handy to make the various requests to the API.
 
+Before trying to run the API, edit src -> main -> resources -> application-sample.properties file, including username and password fot H2 database.
+Save the file as application.properties.
+Run the API.
+
 ## Enpoints and payloads
 ### Endpoints
 **Action** | **Endpoint** | **Method**
