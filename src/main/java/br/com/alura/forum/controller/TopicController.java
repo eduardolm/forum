@@ -9,6 +9,9 @@ import br.com.alura.forum.service.CourseService;
 import br.com.alura.forum.service.TopicService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,13 +29,18 @@ public class TopicController {
     private final TopicService topicService;
 
     @GetMapping
-    public List<TopicDto> list(String courseName) {
+    public Page<TopicDto> list(@RequestParam(required = false) String courseName,
+                               @RequestParam int page,
+                               @RequestParam int quantity) {
+
+        Pageable pagination = PageRequest.of(page, quantity);
+
         if (courseName == null) {
-            List<Topic> topics = topicService.findAll();
+            Page<Topic> topics = topicService.findAll(pagination);
             return TopicDto.convertTopicToTopicDto(topics);
         }
         else {
-            List<Topic> topics = topicService.findByCourseName(courseName);
+            Page<Topic> topics = topicService.findByCourseName(courseName, pagination);
             return TopicDto.convertTopicToTopicDto(topics);
         }
     }

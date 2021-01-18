@@ -7,6 +7,8 @@ import br.com.alura.forum.repository.CourseRepository;
 import br.com.alura.forum.repository.TopicRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +21,13 @@ public class TopicService {
     private final TopicRepository topicRepository;
     private final CourseRepository courseRepository;
 
-    public List<Topic> findAll() {
-        return topicRepository.findAll();
+    public Page<Topic> findAll(Pageable pagination) {
+
+        return topicRepository.findAll(pagination);
     }
 
-    public List<Topic> findByCourseName(String courseName) {
-        return topicRepository.findByCourse_Name(courseName);
+    public Page<Topic> findByCourseName(String courseName, Pageable pagination) {
+        return topicRepository.findByCourse_Name(courseName, pagination);
     }
 
     public Optional<Topic> create(TopicRequest topicRequest) {

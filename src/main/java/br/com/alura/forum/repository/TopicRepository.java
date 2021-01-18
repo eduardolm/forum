@@ -1,6 +1,8 @@
 package br.com.alura.forum.repository;
 
 import br.com.alura.forum.model.Topic;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,6 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
      * the Name attribute inside Course class (via relationship)
      * @return
      */
-    List<Topic> findByCourse_Name(String courseName); // Usando o nome como findByCourse_Name o spring automaticamente faz a query
+    Page<Topic> findByCourse_Name(String courseName, Pageable pagination); // Usando o nome como findByCourse_Name o spring automaticamente faz a query
 
 }
