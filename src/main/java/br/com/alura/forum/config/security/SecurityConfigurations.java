@@ -1,5 +1,6 @@
 package br.com.alura.forum.config.security;
 
+import br.com.alura.forum.repository.UserRepository;
 import br.com.alura.forum.service.AuthTokenFilterService;
 import br.com.alura.forum.service.TokenService;
 import br.com.alura.forum.service.UserAuthenticationService;
@@ -27,6 +28,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
     private final TokenService tokenService;
 
+    private UserRepository userRepository;
+
     @Override
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
@@ -49,7 +52,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthTokenFilterService(tokenService), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AuthTokenFilterService(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
     }
 
     // Static content configuration (js, css, images, etc.)

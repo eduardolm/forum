@@ -5,6 +5,7 @@ import br.com.alura.forum.model.User;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
@@ -47,5 +48,10 @@ public class TokenService {
         catch (Exception e) {
             return false;
         }
+    }
+
+    public Long getUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Long.parseLong(claims.getSubject());
     }
 }

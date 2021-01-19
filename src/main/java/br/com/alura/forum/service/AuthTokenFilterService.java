@@ -1,8 +1,12 @@
 package br.com.alura.forum.service;
 
+import br.com.alura.forum.model.User;
+import br.com.alura.forum.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -11,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @Data
@@ -18,6 +23,7 @@ import java.io.IOException;
 public class AuthTokenFilterService extends OncePerRequestFilter {
 
     private TokenService tokenService;
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -25,8 +31,21 @@ public class AuthTokenFilterService extends OncePerRequestFilter {
 
         String token = retrieveToken(request);
         boolean valid = tokenService.isValidToken(token);
-        System.out.println(valid);
+
+        if (valid) {
+            authenticateUser(token);
+        }
         filterChain.doFilter(request, response);
+    }
+
+    private void authenticateUser(String token) {
+        Long userId = tokenService.getUserId(token);
+        User user = userRepository.findById(userId).orElseThrow();
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                user,
+                null,
+                user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private String retrieveToken(HttpServletRequest request) {
