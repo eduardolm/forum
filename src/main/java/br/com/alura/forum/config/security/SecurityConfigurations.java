@@ -1,6 +1,7 @@
 package br.com.alura.forum.config.security;
 
 import br.com.alura.forum.service.AuthTokenFilterService;
+import br.com.alura.forum.service.TokenService;
 import br.com.alura.forum.service.UserAuthenticationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
     private final UserAuthenticationService userAuthenticationService;
 
+    private final TokenService tokenService;
+
     @Override
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
@@ -46,7 +49,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthTokenFilterService(), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AuthTokenFilterService(tokenService), UsernamePasswordAuthenticationFilter.class);
     }
 
     // Static content configuration (js, css, images, etc.)

@@ -1,6 +1,10 @@
 package br.com.alura.forum.service;
 
+import br.com.alura.forum.dto.TokenDto;
 import br.com.alura.forum.model.User;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
@@ -35,6 +39,14 @@ public class TokenService {
     }
 
     public boolean isValidToken(String token) {
-        return true;
+
+        try {
+            TokenDto deserializedTree = new ObjectMapper().readValue(token, TokenDto.class);
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 }

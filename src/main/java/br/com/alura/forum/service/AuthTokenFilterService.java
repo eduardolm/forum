@@ -1,5 +1,8 @@
 package br.com.alura.forum.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -10,13 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Service
+@Data
+@AllArgsConstructor
 public class AuthTokenFilterService extends OncePerRequestFilter {
 
     private TokenService tokenService;
-
-    public AuthTokenFilterService(TokenService tokenService) {
-        this.tokenService = tokenService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -24,12 +25,13 @@ public class AuthTokenFilterService extends OncePerRequestFilter {
 
         String token = retrieveToken(request);
         boolean valid = tokenService.isValidToken(token);
+        System.out.println(valid);
         filterChain.doFilter(request, response);
     }
 
     private String retrieveToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if (token == null || token.isEmpty() || token.isBlank() || !token.startsWith("Bearer ")) {
+        if (token == null || token.isEmpty() || token.isBlank() || !token.startsWith("Bearer")) {
             return null;
         }
         return token.substring(7);

@@ -25,6 +25,6 @@ public class AuthenticationController {
     public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
         String token = Objects.requireNonNull(authService.authenticate(loginRequest).getBody()).toString();
 
-        return ResponseEntity.ok(new TokenDto("Bearer ", token));
+        return ResponseEntity.ok(new TokenDto("Bearer", token));
     }
 }
