@@ -1,6 +1,7 @@
-package br.com.alura.forum.config.security;
+package br.com.alura.forum.service;
 
 import br.com.alura.forum.model.User;
+import br.com.alura.forum.repository.UserRepository;
 import br.com.alura.forum.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,13 +16,13 @@ import java.util.Optional;
 @Service
 @Data
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class AuthenticationService implements UserDetailsService {
+public class UserAuthenticationService implements UserDetailsService {
 
-    private UserService userService;
+    private UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userService.findByEmail(username);
+        Optional<User> user = repository.findByEmail(username);
         if (user.isPresent()) {
             return user.get();
         }
