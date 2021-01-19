@@ -41,7 +41,6 @@ public class TokenService {
     public boolean isValidToken(String token) {
 
         try {
-            TokenDto deserializedTree = new ObjectMapper().readValue(token, TokenDto.class);
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
         }
