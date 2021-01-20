@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 public class TokenService {
 
     @Value("${forum.jwt.expiration}")

@@ -18,7 +18,7 @@ import java.io.IOException;
 
 @Service
 @Data
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 @AllArgsConstructor
 public class AuthTokenFilterService extends OncePerRequestFilter {
 

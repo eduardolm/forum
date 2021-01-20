@@ -32,6 +32,8 @@ public class DevSecurityConfigurations extends WebSecurityConfigurerAdapter {
             "/swagger-resources/configuration/security",
             "/swagger-resource/**",
             "/swagger-ui.html",
+            "/swagger*/**",
+            "/h2-console/**",
             "/v2/api-docs",
             "/webjars/**"
     };
@@ -48,14 +50,6 @@ public class DevSecurityConfigurations extends WebSecurityConfigurerAdapter {
     // Static content configuration (js, css, images, etc.)
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs/**",
-                "/swagger-resources/**",
-                "/configuration/ui/**",
-                "/configuration/security/**",
-                "/swagger-ui.html",
-                "/swagger*/**",
-                "/webjars/**",
-                "/h2-console/**",
-                "/**.html");
+        web.ignoring().antMatchers(AUTH_WHITELIST);
     }
 }

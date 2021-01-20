@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @Data
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserAuthenticationService implements UserDetailsService {
 

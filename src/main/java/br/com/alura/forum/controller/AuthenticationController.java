@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthenticationController {
 
