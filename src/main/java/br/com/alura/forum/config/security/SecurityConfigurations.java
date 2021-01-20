@@ -18,9 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-
-import javax.servlet.ServletContext;
 
 @EnableWebSecurity
 @Configuration
@@ -31,9 +28,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
     private final TokenService tokenService;
 
-    private UserRepository userRepository;
-
-    private ServletContext servletContext_;
+    private final UserRepository userRepository;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
