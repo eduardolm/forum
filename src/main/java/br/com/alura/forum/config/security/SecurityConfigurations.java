@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @EnableWebSecurity
 @Configuration
@@ -48,7 +49,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v1/topics").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/topics/*").permitAll()
-                .antMatchers(HttpMethod.GET, "/actuator/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
@@ -59,11 +60,13 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     // Static content configuration (js, css, images, etc.)
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(
-                "/**.html",
-                "/v2/api-docs",
-                "/webjars/**",
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/swagger-resources/**",
                 "/configuration/**",
-                "/swagger-resources/**");
+                "/swagger-ui.html",
+                "/swagger*/**",
+                "/webjars/**",
+                "/h2-console/**",
+                "/**.html");
     }
 }
