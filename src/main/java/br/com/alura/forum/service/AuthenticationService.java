@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthenticationService {
 
-    private AuthenticationManager authManager;
+    private final AuthenticationManager authManager;
 
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     public ResponseEntity<?> authenticate(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken loginData = loginRequest.convert();
