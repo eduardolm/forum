@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -57,6 +58,7 @@ public class TopicController {
     }
 
     @PostMapping
+    @Transactional
     @CacheEvict(value = "topicList", allEntries = true)
     public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequest topicRequest, UriComponentsBuilder uriBuilder) {
         var response = topicService.create(topicRequest).orElseThrow();
@@ -66,6 +68,7 @@ public class TopicController {
     }
 
     @PutMapping("{id}")
+    @Transactional
     @CacheEvict(value = "topicList", allEntries = true)
     public ResponseEntity<TopicDto> update(@PathVariable() Long id, @RequestBody @Valid TopicUpdateRequest topicUpdateRequest) {
         Topic topicToUpdate = topicService.update(id, topicUpdateRequest).orElseThrow();
@@ -73,6 +76,7 @@ public class TopicController {
     }
 
     @DeleteMapping("{id}")
+    @Transactional
     @CacheEvict(value = "topicList", allEntries = true)
     public ResponseEntity<?> delete(@PathVariable() Long id) {
         Optional<Topic> optionalTopic = topicService.findById(id);
