@@ -22,15 +22,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
-@Profile("prod")
+@Profile("dev")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
-
-    private final UserAuthenticationService userAuthenticationService;
-
-    private final TokenService tokenService;
-
-    private final UserRepository userRepository;
+public class DevSecurityConfigurations extends WebSecurityConfigurerAdapter {
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -42,32 +36,13 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
             "/webjars/**"
     };
 
-    @Override
-    @Bean
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
-    }
-
-    // Authentication configuration
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userAuthenticationService).passwordEncoder(new BCryptPasswordEncoder());
-    }
 
     // Authorization Configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/v1/topics").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/topics/*").permitAll()
-                .antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
-                .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/v1/topics/*").hasRole("MODERADOR")
-                .anyRequest().authenticated()
-                .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthTokenFilterService(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/**").permitAll()
+                .and().csrf().disable();
     }
 
     // Static content configuration (js, css, images, etc.)

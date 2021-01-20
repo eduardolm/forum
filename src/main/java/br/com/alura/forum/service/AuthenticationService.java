@@ -3,6 +3,7 @@ package br.com.alura.forum.service;
 import br.com.alura.forum.controller.request.LoginRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile("prod")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthenticationService {
 

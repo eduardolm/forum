@@ -4,7 +4,7 @@ import br.com.alura.forum.model.User;
 import br.com.alura.forum.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 @Data
+@Profile("prod")
 @AllArgsConstructor
 public class AuthTokenFilterService extends OncePerRequestFilter {
 
