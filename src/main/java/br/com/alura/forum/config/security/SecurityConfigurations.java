@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
+import javax.servlet.ServletContext;
+
 @EnableWebSecurity
 @Configuration
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -30,6 +32,18 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     private final TokenService tokenService;
 
     private UserRepository userRepository;
+
+    private ServletContext servletContext_;
+
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-resources/configuration/ui",
+            "/swagger-resources/configuration/security",
+            "/swagger-resource/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
 
     @Override
     @Bean
@@ -49,7 +63,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v1/topics").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/topics/*").permitAll()
-                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                .antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
+                .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
@@ -60,9 +75,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     // Static content configuration (js, css, images, etc.)
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs",
+        web.ignoring().antMatchers("/v2/api-docs/**",
                 "/swagger-resources/**",
-                "/configuration/**",
+                "/configuration/ui/**",
+                "/configuration/security/**",
                 "/swagger-ui.html",
                 "/swagger*/**",
                 "/webjars/**",
