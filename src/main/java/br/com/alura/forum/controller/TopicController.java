@@ -9,14 +9,18 @@ import br.com.alura.forum.service.CourseService;
 import br.com.alura.forum.service.TopicService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -30,12 +34,12 @@ public class TopicController {
     private final TopicService topicService;
 
     @GetMapping
+    @Cacheable(value = "topicList")
     public Page<TopicDto> list(@RequestParam(required = false) String courseName,
-                               @RequestParam int page,
-                               @RequestParam int quantity,
-                               @RequestParam String orderBy) {
-
-        Pageable pagination = PageRequest.of(page, quantity, Sort.Direction.ASC, orderBy);
+                               @PageableDefault(sort = "id",
+                                                direction = Sort.Direction.ASC,
+                                                page = 0,
+                                                size = 10) Pageable pagination) {
 
         if (courseName == null) {
             Page<Topic> topics = topicService.findAll(pagination);
@@ -54,6 +58,8 @@ public class TopicController {
     }
 
     @PostMapping
+    @Transactional
+    @CacheEvict(value = "topicList", allEntries = true)
     public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequest topicRequest, UriComponentsBuilder uriBuilder) {
         var response = topicService.create(topicRequest).orElseThrow();
 
@@ -62,12 +68,16 @@ public class TopicController {
     }
 
     @PutMapping("{id}")
+    @Transactional
+    @CacheEvict(value = "topicList", allEntries = true)
     public ResponseEntity<TopicDto> update(@PathVariable() Long id, @RequestBody @Valid TopicUpdateRequest topicUpdateRequest) {
         Topic topicToUpdate = topicService.update(id, topicUpdateRequest).orElseThrow();
         return ResponseEntity.ok(new TopicDto(topicToUpdate));
     }
 
     @DeleteMapping("{id}")
+    @Transactional
+    @CacheEvict(value = "topicList", allEntries = true)
     public ResponseEntity<?> delete(@PathVariable() Long id) {
         Optional<Topic> optionalTopic = topicService.findById(id);
         if (optionalTopic.isPresent()) {
